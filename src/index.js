@@ -1,13 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Router } from 'react-router-dom';
+import { ConfigProvider } from 'antd';
+import zhCN from 'antd/es/locale/zh_CN';
+import history from 'libs/history';
 import './index.css';
 import App from './App';
+import moment from 'moment';
+import 'moment/locale/zh-cn';
 import * as serviceWorker from './serviceWorker';
 
+moment.locale('zh-cn');
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Router history={history}>
+    <ConfigProvider locale={zhCN}>
+      <App />
+    </ConfigProvider>
+  </Router>,
   document.getElementById('root')
 );
 
