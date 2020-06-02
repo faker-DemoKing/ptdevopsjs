@@ -17,7 +17,6 @@ class Sider extends React.Component {
             selectedKeys: [],
             openKeys: [lodash.get(this.keysMap, props.location.pathname)],
         };
-
     }
     _init() {
         this.keysMap = {};
@@ -28,9 +27,24 @@ class Sider extends React.Component {
         }
     }
 
+    UNSAFE_componentWillReceiveProps(nextProps, nextContext) {
+        if (nextProps.collapsed && !this.props.collapsed) {
+            this.setState({ openKeys: [] })
+        }
+    }
+    
     makeMenu = (menu) => {
         if (menu.auth !== undefined && !hasPermission(menu.auth)) return null;
         return (menu.child) ? this.makeSubMenu(menu) : this.makeItem(menu)
+    };
+
+    makeItem = (menu) => {
+        return (
+            <Menu.Item key={menu.path}>
+                {menu.icon && <Icon type={menu.icon} />}
+                <span>{menu.title}</span>
+            </Menu.Item>
+        )
     };
 
     makeSubMenu = (subMenu) => {
@@ -40,6 +54,17 @@ class Sider extends React.Component {
         </Menu.SubMenu>
         )
     };
+
+    handleSelect = ({ key }) => {
+        history.push(key)
+    };
+
+    handleClick = ({ key }) => {
+        if (key === this.state.selectedKeys[0] && key !== this.props.location.pathname) {
+            this.props.history.push(key)
+        }
+    };
+
     render() {
         return (
             <Layout.Sider collapsed={this.props.collapsed}>

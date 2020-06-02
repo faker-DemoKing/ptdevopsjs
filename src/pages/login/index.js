@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, Input, Icon, Button, Tabs, Modal } from 'antd';
+import { Form, Input, Icon, Button, Tabs, Modal, message } from 'antd';
+// import cookie from 'react-cookies';
 import styles from './login.module.css';
 import logo from 'layout/logo-text.png';
 import md5 from 'md5';
@@ -13,7 +14,8 @@ class LoginIndex extends React.Component {
         super(props);
         this.state = {
             loading: false,
-            loginType: 'default'
+            loginType: 'default',
+            // username: cookie.load('username')
         }
     }
 
@@ -22,29 +24,40 @@ class LoginIndex extends React.Component {
         requestStore.records = [];
         requestStore.deploys = []
     }
-
+    loginSuccess = (data) => {
+        if (!data['has_real_ip']) {
+            Modal.warning({
+                title: '安全警告',
+                className: styles.tips,
+                content: <div>
+                        未能获取到客户端的真实IP，无法提供基于请求来源IP的合法性验证，详细信息请参考
+                        <a target="_blank" href="" rel="noopener noreferrer">官方文档</a>。
+                    </div>,
+                onOk: () => this.doLogin(data)
+            })
+        } else {
+            this.doLogin(data)
+        }
+    }
+    requestFailed = (err) => {
+        const data = err.response.data.message
+        message.error('错误: ' + data, 3)
+    }
     handleSubmit = () => {
         this.props.form.validateFields((err, formData) => {
             if (!err) {
                 this.setState({ loading: true });
                 formData['type'] = this.state.loginType;
                 formData['password'] = md5(formData['password'])
+                console.log(formData['password'])
+                let username = formData['username']
+                this.setState({ username });
+                // cookie.save('username', username, { path: '/' });
                 http.post('/api/login', formData)
-                    .then(data => {
-                        if (!data['has_real_ip']) {
-                            Modal.warning({
-                                title: '安全警告',
-                                className: styles.tips,
-                                content: <div>
-                                    未能获取到客户端的真实IP，无法提供基于请求来源IP的合法性验证，详细信息请参考
-                  <a target="_blank" href="" rel="noopener noreferrer">官方文档</a>。
-                </div>,
-                                onOk: () => this.doLogin(data)
-                            })
-                        } else {
-                            this.doLogin(data)
-                        }
-                    }, () => this.setState({ loading: false }))
+                    .then(data => this.loginSuccess(data), () => this.setState({ loading: false }))
+                    .catch((err) => this.requestFailed(err))
+            } else {
+                message.error(err, 3)
             }
         })
     };
@@ -63,6 +76,9 @@ class LoginIndex extends React.Component {
     };
 
     render() {
+        if (localStorage.getItem('nickname')){
+            history.goBack()
+        }
         const { getFieldDecorator } = this.props.form;
         return (
             <div className={styles.container}>

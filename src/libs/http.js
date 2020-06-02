@@ -23,7 +23,7 @@ function handleResponse(response) {
             result = '无效的数据格式'
         }
     } else {
-        result = `请求失败: ${response.status} ${response.statusText}`
+        result = `请求失败: ${response.status} ${response.data.message}`
     }
     message.error(result);
     return Promise.reject(result)
@@ -31,6 +31,7 @@ function handleResponse(response) {
 
 // 请求拦截器
 http.interceptors.request.use(request => {
+    
     if (request.url.startsWith('/api/')) {
         request.headers['X-Token'] = localStorage.getItem('token')
     }
@@ -51,5 +52,6 @@ http.interceptors.response.use(response => {
 });
 
 http.defaults.baseURL = 'http://devops-backend.faker.com'
-
+// http.defaults.baseURL = 'http://192.168.1.44:5000'
+http.defaults.withCredentials = true
 export default http;
