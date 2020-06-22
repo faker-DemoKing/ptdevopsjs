@@ -1,11 +1,12 @@
 import React from 'react';
-import { hasPermission } from "../libs";
+import { Card } from 'antd';
+import { hasPermission } from 'libs';
 
-// 判断是否有菜单权限
-export default function AuthDiv(props) {
+
+export default function AuthCard(props) {
     let disabled = props.disabled === undefined ? false : props.disabled;
     if (props.auth && !hasPermission(props.auth)) {
         disabled = true;
     }
-    return disabled ? null : <div {...props}>{props.children}</div>
+    return disabled ? null : <Card {...props}>{props.children}</Card>
 }

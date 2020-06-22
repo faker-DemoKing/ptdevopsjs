@@ -3,8 +3,8 @@ import { Row, Col } from 'antd';
 import { AuthDiv } from 'components';
 import StatisticsCard from './StatisticCard';
 import AlarmTrend from './AlarmTrend';
-// import RequestTop from './RequestTop';
-// import DeployPie from './DeployPie';
+import RequestTop from './RequestTop';
+import DeployPie from './DeployPie';
 
 class HomeIndex extends React.Component {
     render() {
@@ -12,14 +12,14 @@ class HomeIndex extends React.Component {
             <AuthDiv auth="home.home.view">
                 <StatisticsCard />
                 <AlarmTrend />
-                {/* <Row style={{ marginTop: 20 }}>
+                <Row style={{ marginTop: 20 }}>
                     <Col span={13}>
                         <RequestTop />
                     </Col>
                     <Col span={10} offset={1}>
                         <DeployPie />
                     </Col>
-                </Row> */}
+                </Row> 
             </AuthDiv>
         )
     }

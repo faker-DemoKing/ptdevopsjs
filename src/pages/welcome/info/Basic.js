@@ -15,7 +15,6 @@ export default function Basic(props) {
 
   function handleSubmit() {
     store.loading = true;
-    console.log(nickname)
     http.patch('/api/v1/user/self', {nickname})
       .then(() => {
         message.success('设置成功，重新登录或刷新页面后生效');

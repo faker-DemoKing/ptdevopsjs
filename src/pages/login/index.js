@@ -49,7 +49,6 @@ class LoginIndex extends React.Component {
                 this.setState({ loading: true });
                 formData['type'] = this.state.loginType;
                 formData['password'] = md5(formData['password'])
-                console.log(formData['password'])
                 let username = formData['username']
                 this.setState({ username });
                 // cookie.save('username', username, { path: '/' });
