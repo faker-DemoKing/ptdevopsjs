@@ -2,6 +2,8 @@ import http from 'axios'
 import history from './history'
 import { message } from 'antd';
 
+
+
 // response处理
 function handleResponse(response) {
     let result;
@@ -51,7 +53,10 @@ http.interceptors.response.use(response => {
     return Promise.reject(result)
 });
 
+
+http.defaults.timeout = 200000;
+http.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
 http.defaults.baseURL = 'http://devops-backend.faker.com'
-// http.defaults.baseURL = 'http://192.168.1.44:5000'
-http.defaults.withCredentials = true
+http.defaults.withCredentials = true // session
+
 export default http;

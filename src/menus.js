@@ -36,4 +36,13 @@ export default [
             { title: '系统设置', auth: 'system.setting.view', path: '/system/setting' },
         ]
     },
+    {
+        icon: 'file', title: '证书管理', auth: "ssl.ssl.view", child: [
+            { title: '证书', 'auth': "ssl.ssl.view", path: '/ssl/index' },
+            { icon:'setting', title: '配置', 'auth': "ssl.setting.setting.view", child: [
+                {  title: 'acme配置', 'auth': "ssl.setting.acme.view" , path: '/ssl/setting/acme'}
+                ] 
+            }
+        ]
+    }
 ]

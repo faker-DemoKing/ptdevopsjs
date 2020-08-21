@@ -35,7 +35,7 @@ export default class extends React.Component {
 
   handleLogout = () => {
     history.push('/');
-    http.get('/api/logout')
+    http.post('/api/logout')
     localStorage.removeItem('token');
     localStorage.removeItem('nickname');
     localStorage.removeItem('is_supper');

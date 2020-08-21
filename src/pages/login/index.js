@@ -51,7 +51,6 @@ class LoginIndex extends React.Component {
                 formData['password'] = md5(formData['password'])
                 let username = formData['username']
                 this.setState({ username });
-                // cookie.save('username', username, { path: '/' });
                 http.post('/api/login', formData)
                     .then(data => this.loginSuccess(data), () => this.setState({ loading: false }))
                     .catch((err) => this.requestFailed(err))
@@ -66,6 +65,7 @@ class LoginIndex extends React.Component {
         localStorage.setItem('nickname', data['nickname']);
         localStorage.setItem('is_supper', data['is_supper']);
         localStorage.setItem('permissions', JSON.stringify(data['permissions']));
+        localStorage.setItem('host_perms', JSON.stringify(data['host_perms']));
         updatePermissions(data['is_supper'], data['permissions']);
         if (history.location.state && history.location.state['from']) {
             history.push(history.location.state['from'])

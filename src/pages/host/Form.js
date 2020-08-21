@@ -19,7 +19,7 @@ class ComForm extends React.Component {
         this.setState({ loading: true });
         const formData = this.props.form.getFieldsValue();
         formData['id'] = store.record.id;
-        http.post('/api/v1/host', formData)
+        http.post('/api/v1/host/', formData)
             .then(res => {
                 if (res === 'auth fail') {
                     this.setState({ loading: false });
@@ -40,7 +40,7 @@ class ComForm extends React.Component {
     handleConfirm = (formData) => {
         if (this.state.password) {
             formData['password'] = this.state.password;
-            return http.post('/api/v1/host', formData).then(res => {
+            return http.post('/api/v1/host/', formData).then(res => {
                 message.success('验证成功');
                 store.formVisible = false;
                 store.fetchRecords()

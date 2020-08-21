@@ -2,14 +2,14 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Table, Divider, Modal, message } from 'antd';
 import { LinkButton } from 'components';
-import ComForm from './Form';
+import AcmeForm from './AcmeForm';
 import http from 'libs/http';
 import store from './store';
 
 @observer
 class ComTable extends React.Component {
     componentDidMount() {
-        store.fetchRecords()
+        store.fetchAcmeSettings()
     }
 
     columns = [{
@@ -18,17 +18,14 @@ class ComTable extends React.Component {
         render: (_, __, index) => index + 1,
         width: 80
     }, {
-        title: '类别',
-        dataIndex: 'zone',
+        title: 'DNS类型',
+        dataIndex: 'type',
     }, {
-        title: '主机名称',
-        dataIndex: 'name',
+        title: 'user',
+        dataIndex: 'user',
     }, {
-        title: '连接地址',
-        dataIndex: 'hostname',
-    }, {
-        title: '端口',
-        dataIndex: 'port'
+        title: 'key',
+        dataIndex: 'key',
     }, {
         title: '备注',
         dataIndex: 'desc',
@@ -38,25 +35,20 @@ class ComTable extends React.Component {
         width: 200,
         render: info => (
             <span>
-                <LinkButton auth="host.host.edit" onClick={() => store.showForm(info)}>编辑</LinkButton>
+                <LinkButton auth="ssl.setting.acme.edit" onClick={() => store.showAcmeForm(info)}>编辑</LinkButton>
                 <Divider type="vertical" />
-                <LinkButton auth="host.host.del" onClick={() => this.handleDelete(info)}>删除</LinkButton>
+                <LinkButton auth="ssl.setting.acme.del" onClick={() => this.handleDelete(info)}>删除</LinkButton>
                 <Divider type="vertical" />
-                <LinkButton auth="host.host.console" onClick={() => this.handleConsole(info)}>Console</LinkButton>
             </span>
         )
     }];
-
-    handleConsole = (info) => {
-        window.open(`/api/v1/host/ssh/${info.id}/?x-token=${localStorage.getItem('token')}`)
-    };
 
     handleDelete = (text) => {
         Modal.confirm({
             title: '删除确认',
             content: `确定要删除【${text['name']}】?`,
             onOk: () => {
-                return http.delete('/api/v1/host', { params: { id: text.id } })
+                return http.delete('/api/v1/ssl/setting/acme', { params: { id: text.id } })
                     .then(() => {
                         message.success('删除成功');
                         store.fetchRecords()
@@ -67,20 +59,20 @@ class ComTable extends React.Component {
 
     render() {
         let data = store.permRecords;
-        if (store.f_name) {
-            data = data.filter(item => item['name'].toLowerCase().includes(store.f_name.toLowerCase()))
+        if (store.f_user) {
+            data = data.filter(item => item['user'].toLowerCase().includes(store.f_user.toLowerCase()))
         }
-        if (store.f_zone) {
-            data = data.filter(item => item['zone'].toLowerCase().includes(store.f_zone.toLowerCase()))
+        if (store.f_type) {
+            data = data.filter(item => item['type'].toLowerCase().includes(store.f_type.toLowerCase()))
         }
-        if (store.f_host) {
-            data = data.filter(item => item['hostname'].toLowerCase().includes(store.f_host.toLowerCase()))
+        if (store.f_key) {
+            data = data.filter(item => item['key'].toLowerCase().includes(store.f_key.toLowerCase()))
         }
         return (
             <React.Fragment>
                 <Table rowKey="id" 
                 loading={store.isFetching} 
-                dataSource={data} 
+                dataSource={data}
                 columns={this.columns} 
                 pagination={{
                     showSizeChanger: true,
@@ -88,7 +80,7 @@ class ComTable extends React.Component {
                     hideOnSinglePage: true,
                     pageSizeOptions: ['10', '20', '50', '100']
                 }}/>
-                {store.formVisible && <ComForm />}
+                {store.formVisible && <AcmeForm />}
             </React.Fragment>
         )
     }
