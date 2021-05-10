@@ -28,14 +28,14 @@ export default class extends React.Component {
 
   fetch = () => {
     this.setState({ loading: true });
-    http.get('/api/v1/user/notify')
+    http.get('/api/v1/account/user/notify')
       .then(res => this.setState({ notifies: res, read: [] }))
       .finally(() => this.setState({ loading: false }))
   };
 
   handleLogout = () => {
     history.push('/');
-    http.post('/api/logout')
+    http.post('/api/v1/account/logout')
     localStorage.removeItem('token');
     localStorage.removeItem('nickname');
     localStorage.removeItem('is_supper');
@@ -47,7 +47,7 @@ export default class extends React.Component {
     if (this.state.read.indexOf(item.id) === -1) {
       this.state.read.push(item.id);
       this.setState({ read: this.state.read });
-      http.patch('/api/v1/user/notify', { ids: [item.id] })
+      http.patch('/api/v1/account/user/notify', { ids: [item.id] })
     }
   };
 
@@ -55,7 +55,7 @@ export default class extends React.Component {
     const ids = this.state.notifies.map(x => x.id);
 
     this.setState({ read: ids });
-    http.patch('/api/v1/user/notify', { ids })
+    http.patch('/api/v1/account/user/notify', { ids })
   };
 
   notify = () => (

@@ -2,7 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Modal, Form, Input, Select, Col, Button, message } from 'antd';
 import http from 'libs/http';
-import store from './store';
+import store from './dns_store';
 
 @observer
 class ComForm extends React.Component {
@@ -18,7 +18,7 @@ class ComForm extends React.Component {
         this.setState({ loading: true });
         const formData = this.props.form.getFieldsValue();
         formData['id'] = store.record.id;
-        http.post('/api/v1/ssl/setting/acme', formData)
+        http.post('/api/v1/ssl/setting/acme/dns', formData)
             .then(res => {
                 message.success('操作成功');
                 store.formVisible = false;
@@ -33,8 +33,8 @@ class ComForm extends React.Component {
             content: this.addTypeForm,
             onOk: () => {
                 if (this.state.type) {
-                    store.acme_types.push(this.state.type);
-                    this.props.form.setFieldsValue({ 'type': this.state.type })
+                    store.acme_dns_types.push(this.state.type);
+                    this.props.form.setFieldsValue({ 'acme_dns_type': this.state.type })
                 }
             },
         })
@@ -70,6 +70,7 @@ class ComForm extends React.Component {
         </Form>
     );
 
+
     render() {
         const info = store.record;
         const { getFieldDecorator } = this.props.form;
@@ -86,19 +87,19 @@ class ComForm extends React.Component {
                 <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
                     <Form.Item required label="DNS类型">
                         <Col span={14}>
-                            {getFieldDecorator('type', { initialValue: info['type'], rules: [{ required: true, message: '请输入主机类别/区域/分组' }] })(
-                                <Select placeholder="请选择主机类别/区域/分组">
-                                    {store.acme_types.map(item => (
+                            {getFieldDecorator('acme_dns_type', { initialValue: info['acme_dns_type'], rules: [{ required: true, message: '请输入主机类别/区域/分组' }] })(
+                                <Select placeholder="请选择dns类型">
+                                    {store.acme_dns_types.map(item => (
                                         <Select.Option value={item} key={item}>{item}</Select.Option>
                                     ))}
                                 </Select>
                             )}
                         </Col>
                         <Col span={4} offset={1}>
-                            <Button type="link" onClick={this.handleAddZone}>添加类别</Button>
+                            <Button type="link" onClick={this.handleAddType}>添加类别</Button>
                         </Col>
                         <Col span={4} offset={1}>
-                            <Button type="link" onClick={this.handleEditZone}>编辑类别</Button>
+                            <Button type="link" onClick={this.handleEditType}>编辑类别</Button>
                         </Col>
                     </Form.Item>
                     <Form.Item required label="用户名/secert">
@@ -108,7 +109,7 @@ class ComForm extends React.Component {
                     </Form.Item>
                     <Form.Item required label="key">
                         {getFieldDecorator('key', { initialValue: info['key'], rules: [{ required: true, message: '请输入用户名/secert' }]  })(
-                            <Input placeholder="请输入用户名/secert" />
+                            <Input placeholder="请输入key" />
                         )}
                     </Form.Item>
                 </Form>

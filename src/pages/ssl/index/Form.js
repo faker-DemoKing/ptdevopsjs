@@ -20,6 +20,7 @@ class ComForm extends React.Component {
         this.props.form.validateFields((err, data) => {
           if (!err) {
             this.setState({loading: true});
+            console.log(formData,'==========')
             http.post('/api/v1/ssl', formData)
               .then(() => {
                 message.success('保存成功');

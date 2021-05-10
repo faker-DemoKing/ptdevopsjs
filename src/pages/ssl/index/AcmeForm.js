@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Modal, Form, Input, Select, Col, message  } from 'antd';
 import http from 'libs/http';
 import store from './store';
-import acmeSettingStore from '../setting/store'
+import dnsSettingStore from '../acme/dns_store'
 
 
 @observer
@@ -19,10 +19,10 @@ class ComForm extends React.Component {
 
     handleAcmeChange = value => {
         this.props.form.setFieldsValue({
-            user: acmeSettingStore.fetchSortAcme(value)[0] ? acmeSettingStore.fetchSortAcme(value)[0].user : ' '
+            user: dnsSettingStore.fetchSortAcme(value)[0] ? dnsSettingStore.fetchSortAcme(value)[0].user : ' '
         })
         this.setState({
-            sortAcmes: acmeSettingStore.fetchSortAcme(value),
+            sortAcmes: dnsSettingStore.fetchSortAcme(value),
         })
     }
 
@@ -51,17 +51,17 @@ class ComForm extends React.Component {
                 visible
                 width={800}
                 maskClosable={false}
-                title={'新建acme'}
+                title={'新建dns'}
                 okText="提交"
                 onCancel={() => store.acmeFormVisible = false}
                 confirmLoading={this.state.loading}
                 onOk={this.handleSubmit}>
                 <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
-                    <Form.Item required label="acme类型">
+                    <Form.Item required label="dns类型">
                         <Col span={14}>
-                            {getFieldDecorator('acme_type', {  rules: [{ required: true, message: '请选择acme类型' }] })(
-                                <Select  onChange={this.handleAcmeChange} placeholder="请选择acme类型">
-                                    {acmeSettingStore.acme_types.map(item => (
+                            {getFieldDecorator('dns_type', {  rules: [{ required: true, message: '请选择dns类型' }] })(
+                                <Select  onChange={this.handleAcmeChange} placeholder="请选择dns类型">
+                                    {dnsSettingStore.acme_types.map(item => (
                                         <Select.Option  key={item}>{item}</Select.Option>
                                     ))}
                                 
@@ -71,10 +71,10 @@ class ComForm extends React.Component {
                         </Col>
                     </Form.Item>
 
-                    <Form.Item required label={getFieldValue('acme_type') ? getFieldValue('acme_type') + ' user' : ' ' + ' user' } >
+                    <Form.Item required label={getFieldValue('dns_type') ? getFieldValue('dns_type') + ' user' : ' ' + ' user' } >
                         <Col span={14}>
-                            {getFieldDecorator('user', {  rules: [{ required: true, message: '请选择acme类型' }] })(
-                                <Select  placeholder={'请选择'+getFieldValue('acme_type')+'的user'}>
+                            {getFieldDecorator('user', {  rules: [{ required: true, message: '请选择dns类型' }] })(
+                                <Select  placeholder={'请选择'+getFieldValue('dns_type')+'的user'}>
                                     {sortAcmes.map(item => (
                                         <Select.Option key={item.user}>{item.user}</Select.Option>
                                     ))}

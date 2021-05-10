@@ -6,7 +6,7 @@ import store from './store';
 import ComTable from './Table';
 import AcmeForm from './AcmeForm';
 // import { render } from 'react-dom';
-import acmeSettingStore from '../setting/store'
+import acmeSettingStore from '../acme/dns_store'
 
 @observer
 class SSLIndex extends React.Component {
@@ -38,7 +38,7 @@ class SSLIndex extends React.Component {
                 <AuthDiv auth="ssl.ssl.add" style={{ marginBottom: 16 }}>
                     <Button type="primary" icon="plus" onClick={() => store.showForm()}>新建</Button>
                 </AuthDiv>
-                <AuthDiv auth="ssl.setting.acme.add" style={{ marginBottom: 16 }}>
+                <AuthDiv auth="ssl.ssl.acme_add" style={{ marginBottom: 16 }}>
                     <Button type="primary" icon="plus" onClick={() => store.showAcmeForm()}>新建acme</Button>
                 </AuthDiv>
                 {store.acmeFormVisible && <AcmeForm />}

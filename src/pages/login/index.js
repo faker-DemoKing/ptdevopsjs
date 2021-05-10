@@ -51,7 +51,7 @@ class LoginIndex extends React.Component {
                 formData['password'] = md5(formData['password'])
                 let username = formData['username']
                 this.setState({ username });
-                http.post('/api/login', formData)
+                http.post('/api/v1/account/login', formData)
                     .then(data => this.loginSuccess(data), () => this.setState({ loading: false }))
                     .catch((err) => this.requestFailed(err))
             } else {

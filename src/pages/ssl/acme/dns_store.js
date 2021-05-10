@@ -5,8 +5,8 @@ class Store {
   @observable settings = {};
   @observable isFetching = false;
   @observable loading = false;
-  @observable acmes = []
-  @observable acme_types = [];
+  @observable acme_dnss = []
+  @observable acme_dns_types = [];
   @observable showHost = false;
   @observable record = {}
   @observable formVisible = false;
@@ -19,22 +19,19 @@ class Store {
 
   fetchAcmeSettings = () => {
     this.isFetching = true;
-    http.get('/api/v1/ssl/setting/acme')
-      .then(({ acme_types, acmes, perms }) => {
-        this.acme_types = acme_types
-        this.acmes = acmes
-        this.permRecords = acmes.filter(item => perms.includes(item.id));
-        localStorage.setItem('acme_permRecords', this.permRecords);
+    http.get('/api/v1/ssl/setting/acme/dns')
+      .then(({ acme_dns_types, acme_dnss, perms }) => {
+        this.acme_dns_types = acme_dns_types
+        this.acme_dnss = acme_dnss
+        this.permRecords = acme_dnss.filter(item => perms.includes(item.id));
+        // localStorage.setItem('acme_permRecords', this.permRecords);
       })
       .finally(() => this.isFetching = false)
   };
-  fetchSettings(){
-    
-  }
-  fetchSortAcme = (acme_type) => {
-    this.sortAcmes = this.permRecords.filter(item => item.type === acme_type)
-    return this.sortAcmes
-  }
+  // fetchSortAcme = (acme_dns_type) => {
+  //   this.sortAcmes = this.permRecords.filter(item => item.type === acme_dns_type)
+  //   return this.sortAcmes
+  // }
   showAcmeForm = (info = {}) => {
     this.formVisible = true;  
     this.record = info

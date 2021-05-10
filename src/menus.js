@@ -28,21 +28,19 @@ export default [
             { title: '报警联系人', auth: 'alarm.contact.view', path: '/alarm/contact' },
             { title: '报警联系组', auth: 'alarm.group.view', path: '/alarm/group' },
         ]
+    },   
+    {
+        icon: 'file', title: '证书管理', auth: "ssl.ssl.view", child: [
+            { title: '证书', 'auth': "ssl.ssl.view", path: '/ssl/index' },
+            { icon:'setting', title: '配置', auth: "ssl.setting.view", path: '/ssl/setting'},
+            { icon: 'setting', title: 'acme配置', auth: "ssl.acme.view" , path: '/ssl/acme'}
+        ]
     },
     {
         icon: 'setting', title: '系统管理', auth: "system.account.view|system.role.view|system.setting.view", child: [
             { title: '账户管理', auth: 'system.account.view', path: '/system/account' },
             { title: '角色管理', auth: 'system.role.view', path: '/system/role' },
             { title: '系统设置', auth: 'system.setting.view', path: '/system/setting' },
-        ]
-    },
-    {
-        icon: 'file', title: '证书管理', auth: "ssl.ssl.view", child: [
-            { title: '证书', 'auth': "ssl.ssl.view", path: '/ssl/index' },
-            { icon:'setting', title: '配置', 'auth': "ssl.setting.setting.view", child: [
-                {  title: 'acme配置', 'auth': "ssl.setting.acme.view" , path: '/ssl/setting/acme'}
-                ] 
-            }
         ]
     }
 ]

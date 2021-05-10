@@ -2,9 +2,9 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Table, Divider, Modal, message } from 'antd';
 import { LinkButton } from 'components';
-import AcmeForm from './AcmeForm';
+import AcmeForm from './dnsForm';
 import http from 'libs/http';
-import store from './store';
+import store from './dns_store';
 
 @observer
 class ComTable extends React.Component {
@@ -35,9 +35,9 @@ class ComTable extends React.Component {
         width: 200,
         render: info => (
             <span>
-                <LinkButton auth="ssl.setting.acme.edit" onClick={() => store.showAcmeForm(info)}>编辑</LinkButton>
+                <LinkButton auth="ssl.acme.dns_edit" onClick={() => store.showAcmeForm(info)}>编辑</LinkButton>
                 <Divider type="vertical" />
-                <LinkButton auth="ssl.setting.acme.del" onClick={() => this.handleDelete(info)}>删除</LinkButton>
+                <LinkButton auth="ssl.acme.dns_del" onClick={() => this.handleDelete(info)}>删除</LinkButton>
                 <Divider type="vertical" />
             </span>
         )
@@ -59,6 +59,7 @@ class ComTable extends React.Component {
 
     render() {
         let data = store.permRecords;
+        console.log(data)
         if (store.f_user) {
             data = data.filter(item => item['user'].toLowerCase().includes(store.f_user.toLowerCase()))
         }
